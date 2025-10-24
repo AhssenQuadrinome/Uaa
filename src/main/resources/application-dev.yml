@@ -1,0 +1,11 @@
+spring:
+  # ===================================================================
+  # Datasource configuration
+  # ===================================================================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db-uaa
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: mysecretpassword
+server:
+  port: 8081

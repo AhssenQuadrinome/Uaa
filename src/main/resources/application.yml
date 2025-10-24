@@ -1,0 +1,106 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  application:
+    name: uaa
+  # ===================================================================
+  # General configuration
+  # ===================================================================
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  # ==================================================================
+  # Jackson configuration
+  # ==================================================================
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+  cloud:
+    # ==================================================================
+    # Discovery configuration
+    # ==================================================================
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: "${spring.application.name}"
+        prefer-ip-address: true
+        health-check-critical-timeout: "1m"
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+    # ===================================================================
+    # EDA (Event Driven Architecture) configuration
+    # ===================================================================
+    function:
+      definition: processMemberChangedInputEvent;
+    stream:
+      bindings:
+        processMemberChangedInputEvent-in-0:
+          destination: member-changed
+          group: member-changed-uaa
+      exchange:
+        send-email: send-email
+        email-confirmed: email-confirmed
+# ===================================================================
+# Monitoring & Traceability configuration
+# ===================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+
+mail:
+  # ===================================================================
+  # SendGrid configuration
+  # ===================================================================
+  template:
+    organisation_welcoming_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
+    organisation_member_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
+    organisation_member_account_confirmation_after_validation: d-7f4f9a295dc2418c9049a60f6368a92e
+    organisation_member_reset_password: d-7f4f9a295dc2418c9049a60f6368a92e
+    organisation_member_reset_password_confirmation: d-7f4f9a295dc2418c9049a60f6368a92e
+    admin_user_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
+    account-validation: d-66624af2205a4bfdb543c8afe2461f8c
+uaa:
+  # ===================================================================
+  # Security configuration
+  # ===================================================================
+  security:
+    access-token:
+      key: ZmU4NmI1OGYyODdmZmYzOTVjOTExZGZlYmY2NTJlOThiYjAzODIxMjZmNjI2NTkxMTRmMTg0NzhhNGRiYzkwYWNhOTc3Y2JmMTI3N2Y3NWNlYjlmZDhjNGYzYTkzNDA5NTZkOTJkOGY2ZDVhMTM2ZTYwNWZkMTFlNjNlZTQ1YmVlZTk3OWY3NjI4YTJhYmIxOGI1YjI0Yjk4MDQ1Yjk3N2QwOTAzOThmYmQ0NDMzZjgwYTg5MTQ4ZTRjNDc5M2IyYWQ3ZjU0N2Y3ODhhYmE5MjQ5NjI5NzdkYzBmYzk5YzBiMzU4MmZhNDk1ODgzOTZlOWE0NmEzYWYzMTY5N2E1NTFkZWY5YmM5NjIwOTVkOTAyOTljMWE3MWRlMjYyMTFiNjA1YjY3ZWYwYTIzM2ZmNDM2ZTkwNWVmYTk4Mzg1NWE1ZDg3ZDIxZWE0MWM1OTBiZjE4Nzg4ZTE1MzMxMTk2MTMzZmI2N2VmYzYyNTk3ZDhmOGFkZTc5ZDM3ZjI5ZTUzMWQ2ODFkMDllZWYyNGUyM2M5NTVhM2MwZjRiMDhmMGE0NzgzNTdmNWFiNzE0ODA5MzFmYmIwZWUzNjdlYzg0ZDY2MTBmOGQzOTVlNmQ3NmY2YTI2ZmM1ZDZiMjM3YTU2ODhiY2U4N2YxNzFjYTE1OWRiMzM5NjE1YTBmYzU3NDM=
+      expiration: 43200
+    login-attempt-max: 4
+    password:
+      reset-key-life: 1
+      validation-rule: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!?@#$%^&*'\\\"`§()\\-_=+{};:,<.>|/\\[\\]]).{8,}$"
+    email:
+      validation-rule: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    account:
+      activation-key-life: 1
+    admin:
+      password: mysecretpassword
+
+ui:
+  # ===================================================================
+  # OURBUSWAY configuration
+  # ===================================================================
+  client:
+    url: http://localhost:4200
+  admin:
+    url: http://localhost:4200
