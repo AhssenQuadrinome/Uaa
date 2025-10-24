@@ -1,0 +1,62 @@
+image: maven:3.9.9-amazoncorretto-21-alpine
+
+services:
+  - docker:dind
+
+variables:
+  # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
+  # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  # As of Maven 3.3.0 instead of this you may define these options in `.mvn/maven.config` so the same config is used
+  # when running from the command line.
+  # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+  # Defined variable can be used in case of a job failed
+  # If a job failed we set the corresponding variable to true, so we can know which stage we notify about to the developer
+  JOB_NAME: "default_value"
+  JOB_URL: "default_value"
+  PIPELINE_ID: "default_value"
+  STATUS: "default_value"
+  VERSION: "${CI_COMMIT_BRANCH#release/}"
+  GIT_STRATEGY: clone
+  GIT_DEPTH: 0  # Fetch full history to enable proper merging
+
+# Cache downloaded dependencies and plugins between builds.
+# To keep cache across branches add 'key: "$CI_JOB_NAME"'
+cache:
+  key: "$CI_JOB_NAME"
+  paths:
+    - .m2/repository
+
+stages:
+  - Compilation
+  - Conflict check
+  - Test
+  - Quality
+  - Packaging
+  - Deployment
+  - Manual versioning
+  - Auto versioning
+  - Notify
+
+Docker image build & push:
+  stage: Packaging
+  allow_failure: false
+  image: docker:latest
+  rules:
+    - if: '( ($CI_COMMIT_BRANCH =="dev") || ($CI_COMMIT_BRANCH =~ /^release\/.*/) || ($CI_COMMIT_TAG )) && $CI_COMMIT_MESSAGE !~ /chore: generate changelog.md file/'
+  before_script:
+    - echo "JOB_NAME=$CI_JOB_NAME" > notified_job.env
+    - echo "JOB_URL=$CI_JOB_URL" >> notified_job.env
+    - echo "PIPELINE_ID=$CI_JOB_ID" >> notified_job.env
+    - echo "STATUS=failed" >> notified_job.env
+    - apk update && apk add --no-cache maven openjdk21 syft
+    - export PATH=$PATH:/usr/share/maven
+    - export PATH=$PATH:/usr/lib/jvm/default-jvm
+    - export PATH=$PATH:/usr/bin/syft
+  script:
+    - mvn clean compile -Pdocker jib:build
+  artifacts:
+    reports:
+      dotenv: notified_job.env
