@@ -186,8 +186,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         tokenDaoService.delete(tokenModel);
         loginModel.setActivated(true);
-        loginModel.setPassword(
-                passwordEncoder.encode(userValidateAccountPostResource.getPassword()));
+
+        if ((loginModel.getPassword() == null || loginModel.getPassword().isBlank())
+                && userValidateAccountPostResource.getPassword() != null
+                && !userValidateAccountPostResource.getPassword().isBlank()) {
+            loginModel.setPassword(passwordEncoder.encode(userValidateAccountPostResource.getPassword()));
+        }
+
         loginModel = credentialDaoService.save(loginModel);
         mailingService.sendActivationAccountConfirmationEmail(loginModel);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
