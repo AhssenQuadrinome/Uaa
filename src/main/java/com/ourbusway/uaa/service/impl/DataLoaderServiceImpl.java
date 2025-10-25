@@ -23,7 +23,7 @@ public class DataLoaderServiceImpl implements DataLoaderService, CommandLineRunn
 
     @Override
     public void createAdminUser() {
-        final String adminEmail = "admin@ourbusway.com";
+        final String adminEmail = "ourbusway2025@outlook.com";
 
         if (!userDaoService.existsBy(UserSpecification.withEmail(adminEmail))) {
             log.info("Admin user <{}> not found. Creating default admin...", adminEmail);
