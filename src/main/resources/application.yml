@@ -70,13 +70,11 @@ mail:
   # SendGrid configuration
   # ===================================================================
   template:
-    organisation_welcoming_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
-    organisation_member_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
-    organisation_member_account_confirmation_after_validation: d-7f4f9a295dc2418c9049a60f6368a92e
-    organisation_member_reset_password: d-7f4f9a295dc2418c9049a60f6368a92e
-    organisation_member_reset_password_confirmation: d-7f4f9a295dc2418c9049a60f6368a92e
-    admin_user_account_validation: d-7f4f9a295dc2418c9049a60f6368a92e
-    account-validation: d-66624af2205a4bfdb543c8afe2461f8c
+    organisation_member_reset_password: d-58360fc0abde469785708d9655e6041c
+    organisation_member_reset_password_confirmation: d-bee594bb0c414cd9a1b7db2ddeb79990
+
+    account-validation: d-1430eaf403f040f8a2cd6b9f7833b4f1
+    organisation_member_account_confirmation_after_validation: d-b484fa0b4eff4b4e812e276213452339
 uaa:
   # ===================================================================
   # Security configuration
