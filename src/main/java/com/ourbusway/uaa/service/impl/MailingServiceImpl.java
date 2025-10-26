@@ -50,12 +50,12 @@ public class MailingServiceImpl implements MailingService {
         if (SecurityUtil.isAdmin(loginModel)) {
             accountValidationLinkBuilder =
                     new StringBuilder(ourbuswayAdminUrl)
-                            .append("/#/reset-password?token=")
+                            .append("/reset-password?token=")
                             .append(tokenModel.getValue());
         } else {
             accountValidationLinkBuilder =
                     new StringBuilder(ourbuswayClientUrl)
-                            .append("/#/reset-password?token=")
+                            .append("/reset-password?token=")
                             .append(tokenModel.getValue());
         }
         variables.put("accountValidationLink", accountValidationLinkBuilder.toString());
@@ -109,12 +109,12 @@ public class MailingServiceImpl implements MailingService {
         if (SecurityUtil.isAdmin(user)) {
             accountValidationLinkBuilder =
                     new StringBuilder(ourbuswayAdminUrl)
-                            .append("/#/account-validation?token=")
+                            .append("/account-validation?token=")
                             .append(tokenModel.getValue());
         } else {
             accountValidationLinkBuilder =
                     new StringBuilder(ourbuswayClientUrl)
-                            .append("/#/account-validation?token=")
+                            .append("/account-validation?token=")
                             .append(tokenModel.getValue());
         }
         variables.put("accountValidationLink", accountValidationLinkBuilder.toString());
