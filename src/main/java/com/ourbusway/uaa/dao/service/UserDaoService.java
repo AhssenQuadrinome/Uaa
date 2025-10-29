@@ -15,4 +15,9 @@ public interface UserDaoService {
 
     Page<UserModel> findAllBy(Specification<UserModel> specification, Pageable pageable);
 
+    UserModel createUser(UserModel userModel, String role);
+
+    Page<UserModel> getAllUsers(Pageable pageable);
+
+    UserModel getProfile(String email);
 }

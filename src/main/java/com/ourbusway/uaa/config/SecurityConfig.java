@@ -2,7 +2,9 @@ package com.ourbusway.uaa.config;
 
 import com.ourbusway.uaa.security.JwtAuthenticationFilter;
 import com.ourbusway.uaa.service.LocalUserDetailsService;
+import com.ourbusway.uaa.service.JwtTokenProviderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,14 +27,20 @@ import java.security.SecureRandom;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-    private final LocalUserDetailsService customUserDetailsService;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ObjectProvider<LocalUserDetailsService> customUserDetailsServiceProvider;
+    private final JwtTokenProviderService jwtTokenProviderService;
+    private final PasswordEncoder passwordEncoder; // injected from AppConfig
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
+        LocalUserDetailsService userDetailsService = customUserDetailsServiceProvider.getIfAvailable();
+        if (userDetailsService == null) {
+            throw new IllegalStateException("LocalUserDetailsService bean not available");
+        }
+
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 
@@ -41,12 +48,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
             throws Exception {
         return authConfig.getAuthenticationManager();
-    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -57,24 +58,34 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers("/login").permitAll()
-                                        .requestMatchers("/reset-password").permitAll()
-                                        .requestMatchers("/refresh-token").permitAll()
-                                        .requestMatchers("/validate-account").permitAll()
-                                        .requestMatchers("/forgot-password").permitAll()
-                                        .requestMatchers("/validate-token").permitAll()
-                                        .requestMatchers("/users/register").permitAll()
-                                        .requestMatchers("/actuator/**").permitAll()
-                                        .requestMatchers("/v3/api-docs/**").permitAll()
-                                        .requestMatchers("/v3/api-docs").permitAll()
-                                        .anyRequest()
-                                        .authenticated());
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers(
+                                "/login",
+                                "/reset-password",
+                                "/refresh-token",
+                                "/validate-account",
+                                "/forgot-password",
+                                "/validate-token",
+                                "/users/register",
+                                "/actuator/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs"
+                        ).permitAll()
+
+                        // Admin endpoints
+                        .requestMatchers("/users/admin/**").hasRole("ADMINISTRATOR")
+
+                        // Everything else requires authentication
+                        .anyRequest().authenticated()
+                );
+
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenProviderService);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

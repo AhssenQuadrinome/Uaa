@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RequestMapping("/users")
 public interface UserController {
 
@@ -14,9 +16,8 @@ public interface UserController {
     ResponseEntity<UserGetResource> register(@Valid @RequestBody UserRegistrationPostResource userRegistrationPostResource);
 
     @GetMapping("/profile")
-    ResponseEntity<UserGetResource> getProfile();
+    ResponseEntity<UserGetResource> getProfile(Principal principal);
 
     @PatchMapping("/profile")
-    ResponseEntity<UserGetResource> updateProfile(@Valid @RequestBody UserPatchResource userPatchResource);
-
+    ResponseEntity<UserGetResource> updateProfile(@Valid @RequestBody UserPatchResource userPatchResource, Principal principal);
 }
