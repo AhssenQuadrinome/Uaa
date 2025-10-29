@@ -1,0 +1,76 @@
+### Variables
+@baseURL = http://localhost:8080
+@token = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb29uZmxvd2VyMTkxMUBnbWFpbC5jb20iLCJpZGVudGlmaWVyIjoiY2I1NDI4NmEtMzZhOC00OTQwLTg0ZmEtNTM3NWI5MzBhMzE2Iiwicm9sZSI6IlBBU1NFTkdFUiIsInVzZXJuYW1lIjoibW9vbmZsb3dlcjE5MTFAZ21haWwuY29tIiwiZXhwIjoxNzYxNzk3NTM2LCJpYXQiOjE3NjE3NTQzMzZ9.S0vRDCUTAQTs5u0fb9u36zRUwEWHHJJLvibaMZ6DU-bEhcCVa0_SU-NG2pC48jkipIUnPeJ3v7poFIUEWD8u-Q
+### 1. Login (Get Bearer Token)
+# Run this first and copy the token to the token variable above
+POST {{baseURL}}/authMgtApi/login
+Content-Type: application/json
+
+{
+  "username": "moonflower1911@gmail.com",
+  "password": "newpassword123"
+}
+
+### 2. Get Profile
+GET {{baseURL}}/authMgtApi/users/profile
+Authorization: Bearer {{token}}
+
+### 3. Update Profile
+PATCH {{baseURL}}/authMgtApi/users/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "OurBusWay Administrator2"
+}
+
+### 4. Register New User
+POST {{baseURL}}/authMgtApi/users/register
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "moonflower1911@gmail.com",
+  "password": "StrongPass123",
+  "mobile": "+212612345678",
+  "dateOfBirth": "2002-05-18",
+  "gender": "MALE",
+  "address": "Rabat, Maroc"
+}
+
+### 5. Validate Account (After Registration)
+POST {{baseURL}}/authMgtApi/validate-account
+Content-Type: application/json
+
+{
+  "activationKey": "757db1c4efa441189d9e2b4b9eebd544"
+}
+
+### 6. Forgot Password
+POST {{baseURL}}/authMgtApi/forgot-password
+Content-Type: application/json
+
+{
+  "email": "moonflower1911@gmail.com"
+}
+
+### 7. Reset Password (After Forgot Password)
+POST {{baseURL}}/authMgtApi/reset-password
+Content-Type: application/json
+
+{
+  "resetPasswordKey": "43a3e30a4f1b4200961ee1c5165e26fd",
+  "password": "newpassword123"
+}
+
+### 8. Validate Token
+POST {{baseURL}}/authMgtApi/validate-token
+Content-Type: application/json
+
+{
+  "token": "{{token}}"
+}
+
+###
