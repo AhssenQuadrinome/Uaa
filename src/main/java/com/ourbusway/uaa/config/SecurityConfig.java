@@ -71,7 +71,7 @@ public class SecurityConfig {
                                         .requestMatchers("/actuator/**").permitAll()
                                         .requestMatchers("/v3/api-docs/**").permitAll()
                                         .requestMatchers("/v3/api-docs").permitAll()
-                                        .requestMatchers("/admin/**").hasRole("ADMINISTRATOR")
+                                        .requestMatchers("users/admin/**").hasRole("ADMINISTRATOR")
                                         .anyRequest()
                                         .authenticated());
         http.authenticationProvider(authenticationProvider());

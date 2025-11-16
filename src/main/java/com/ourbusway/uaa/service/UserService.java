@@ -10,7 +10,6 @@ public interface UserService {
 
     ResponseEntity<UserGetResource> register(UserRegistrationPostResource userRegistrationPostResource);
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<UserGetResource> createUserAsAdmin(UserRegistrationPostResource userRegistrationPostResource);
 
     ResponseEntity<UserGetResource> getProfile();
