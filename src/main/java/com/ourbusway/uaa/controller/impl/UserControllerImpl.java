@@ -20,9 +20,13 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<UserGetResource> register(
-            UserRegistrationPostResource userRegistrationPostResource){
+    public ResponseEntity<UserGetResource> register(@Valid @RequestBody UserRegistrationPostResource userRegistrationPostResource) {
         return userService.register(userRegistrationPostResource);
+    }
+
+    @Override
+    public ResponseEntity<UserGetResource> createUserAsAdmin(@Valid @RequestBody UserRegistrationPostResource userRegistrationPostResource) {
+        return userService.createUserAsAdmin(userRegistrationPostResource);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<UserGetResource> updateProfile(UserPatchResource userPatchResource){
+    public ResponseEntity<UserGetResource> updateProfile(@Valid @RequestBody UserPatchResource userPatchResource) {
         return userService.updateProfile(userPatchResource);
     }
 }

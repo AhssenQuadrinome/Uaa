@@ -22,18 +22,17 @@ public class UserDaoServiceImpl implements UserDaoService {
     public UserModel findOneBy(Specification<UserModel> specification) {
         return userRepository
                 .findOne(specification)
-                .orElseThrow(
-                        () -> {
-                            log.debug("Couldn't find any user with the specified criteria");
-                            return new ResourceNotFoundException(
-                                    ResourceNotFoundExceptionTitleEnum.USER_NOT_FOUND,
-                                    "No user found with the specified criteria");
-                        });
+                .orElseThrow(() -> {
+                    log.debug("Couldn't find any user with the specified criteria");
+                    return new ResourceNotFoundException(
+                            ResourceNotFoundExceptionTitleEnum.USER_NOT_FOUND,
+                            "No user found with the specified criteria");
+                });
     }
 
     @Override
-    public UserModel save(UserModel credentialModel) {
-        return userRepository.save(credentialModel);
+    public UserModel save(UserModel userModel) {
+        return userRepository.save(userModel);
     }
 
     @Override
@@ -42,8 +41,7 @@ public class UserDaoServiceImpl implements UserDaoService {
     }
 
     @Override
-    public Page<UserModel> findAllBy(
-            Specification<UserModel> specification, Pageable pageable) {
+    public Page<UserModel> findAllBy(Specification<UserModel> specification, Pageable pageable) {
         return userRepository.findAll(specification, pageable);
     }
 }
