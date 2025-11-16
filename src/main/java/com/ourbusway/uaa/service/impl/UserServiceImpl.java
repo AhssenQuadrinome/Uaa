@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
 
         // Create user with admin-specified role
         UserModel user = userMapper.registrationToModel(registrationRequest);
-        user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         user.setRole(registrationRequest.getRole()); // use role from admin request
         user.setActivated(false); // require activation
         user.setEnabled(true); // enable by default
@@ -91,7 +90,7 @@ public class UserServiceImpl implements UserService {
         user = userDaoService.save(user);
         log.info("Admin created user successfully with email {} and role {}", user.getEmail(), user.getRole());
 
-        // Business logic: Send activation email
+        // Send activation email
         TokenModel tokenModel = tokenService.generateAccountValidationToken(user);
         mailingService.sendActivationAccountEmail(user, tokenModel);
         log.debug("Activation email sent to {}", user.getEmail());
