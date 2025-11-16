@@ -1,5 +1,6 @@
 package com.ourbusway.uaa.resource.user;
 
+import com.ourbusway.uaa.enumeration.RoleEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,4 +24,6 @@ public class UserRegistrationPostResource {
     private String dateOfBirth;
     private String gender;
     private String address;
+
+    private RoleEnum role;
 }

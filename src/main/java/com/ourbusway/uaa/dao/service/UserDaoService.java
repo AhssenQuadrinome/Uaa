@@ -9,10 +9,9 @@ public interface UserDaoService {
 
     UserModel findOneBy(Specification<UserModel> specification);
 
-    UserModel save(UserModel loginModel);
+    UserModel save(UserModel userModel);
 
     boolean existsBy(Specification<UserModel> specification);
 
     Page<UserModel> findAllBy(Specification<UserModel> specification, Pageable pageable);
-
 }
