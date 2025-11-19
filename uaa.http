@@ -1,21 +1,48 @@
 ### Variables
 @baseURL = http://localhost:8080
 @token = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb29uZmxvd2VyMTkxMUBnbWFpbC5jb20iLCJpZGVudGlmaWVyIjoiY2I1NDI4NmEtMzZhOC00OTQwLTg0ZmEtNTM3NWI5MzBhMzE2Iiwicm9sZSI6IlBBU1NFTkdFUiIsInVzZXJuYW1lIjoibW9vbmZsb3dlcjE5MTFAZ21haWwuY29tIiwiZXhwIjoxNzYxNzk3NTM2LCJpYXQiOjE3NjE3NTQzMzZ9.S0vRDCUTAQTs5u0fb9u36zRUwEWHHJJLvibaMZ6DU-bEhcCVa0_SU-NG2pC48jkipIUnPeJ3v7poFIUEWD8u-Q
-### 1. Login (Get Bearer Token)
+### 1. Login as Admin (Get Bearer Token)
 # Run this first and copy the token to the token variable above
 POST {{baseURL}}/authMgtApi/login
 Content-Type: application/json
 
 {
-  "username": "moonflower1911@gmail.com",
-  "password": "newpassword123"
+  "username": "ourbusway2025@outlook.com",
+  "password": "admin123"
 }
 
-### 2. Get Profile
+### 2. Login as Passenger
+POST {{baseURL}}/authMgtApi/login
+Content-Type: application/json
+
+{
+  "username": "passenger@ourbusway.com",
+  "password": "passenger123"
+}
+
+### 3. Login as Driver
+POST {{baseURL}}/authMgtApi/login
+Content-Type: application/json
+
+{
+  "username": "driver@ourbusway.com",
+  "password": "driver123"
+}
+
+### 4. Login as Controller
+POST {{baseURL}}/authMgtApi/login
+Content-Type: application/json
+
+{
+  "username": "controller@ourbusway.com",
+  "password": "controller123"
+}
+
+### 5. Get Profile
 GET {{baseURL}}/authMgtApi/users/profile
 Authorization: Bearer {{token}}
 
-### 3. Update Profile
+### 6. Update Profile
 PATCH {{baseURL}}/authMgtApi/users/profile
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -24,23 +51,23 @@ Content-Type: application/json
   "firstName": "OurBusWay Administrator2"
 }
 
-### 4. Register New User
+### 7. Register as Passenger
 POST {{baseURL}}/authMgtApi/users/register
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "moonflower1911@gmail.com",
-  "password": "StrongPass123",
-  "mobile": "+212612345678",
-  "dateOfBirth": "2002-05-18",
-  "gender": "MALE",
+  "firstName": "Passenger",
+  "lastName": "One",
+  "email": "passenger@ourbusway.com",
+  "password": "passenger123",
+  "mobile": "+212611111111",
+  "dateOfBirth": "1990-09-10",
+  "gender": "Female",
   "address": "Rabat, Maroc"
 }
 
-### 5. Validate Account (After Registration)
+### 8. Validate Account (After Registration)
 POST {{baseURL}}/authMgtApi/validate-account
 Content-Type: application/json
 
@@ -48,15 +75,15 @@ Content-Type: application/json
   "activationKey": "757db1c4efa441189d9e2b4b9eebd544"
 }
 
-### 6. Forgot Password
+### 9. Forgot Password
 POST {{baseURL}}/authMgtApi/forgot-password
 Content-Type: application/json
 
 {
-  "email": "moonflower1911@gmail.com"
+  "email": "passenger@ourbusway.com"
 }
 
-### 7. Reset Password (After Forgot Password)
+### 10. Reset Password (After Forgot Password)
 POST {{baseURL}}/authMgtApi/reset-password
 Content-Type: application/json
 
@@ -65,7 +92,7 @@ Content-Type: application/json
   "password": "newpassword123"
 }
 
-### 8. Validate Token
+### 11. Validate Token
 POST {{baseURL}}/authMgtApi/validate-token
 Content-Type: application/json
 
@@ -73,4 +100,39 @@ Content-Type: application/json
   "token": "{{token}}"
 }
 
+### 12. Admin Creates Driver Account
+
+POST {{baseURL}}/authMgtApi/users/admin/create
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Driver",
+  "lastName": "Two",
+  "email": "hebatou2015@gmail.com",
+  "password": "Driver1234",
+  "mobile": "+212600000001",
+  "dateOfBirth": "1990-01-01",
+  "gender": "Male",
+  "address": "Casablanca, Maroc",
+  "role": "DRIVER"
+}
+
+### 13. Admin Creates Controller Account
+
+POST {{baseURL}}/authMgtApi/users/admin/create
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Controller",
+  "lastName": "Two",
+  "email": "elouerkhaouihiba4@gmail.com",
+  "password": "Controller1234",
+  "mobile": "+212600000001",
+  "dateOfBirth": "1990-01-01",
+  "gender": "Male",
+  "address": "Casablanca, Maroc",
+  "role": "CONTROLLER"
+}
 ###
