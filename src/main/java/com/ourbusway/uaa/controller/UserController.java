@@ -13,9 +13,6 @@ public interface UserController {
     @PostMapping("/register")
     ResponseEntity<UserGetResource> register(@Valid @RequestBody UserRegistrationPostResource userRegistrationPostResource);
 
-    @PostMapping("/admin/create")
-    ResponseEntity<UserGetResource> createUserAsAdmin(@Valid @RequestBody UserRegistrationPostResource userRegistrationPostResource);
-
     @GetMapping("/profile")
     ResponseEntity<UserGetResource> getProfile();
 
