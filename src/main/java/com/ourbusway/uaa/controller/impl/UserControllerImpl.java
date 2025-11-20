@@ -25,11 +25,6 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<UserGetResource> createUserAsAdmin(UserRegistrationPostResource userRegistrationPostResource) {
-        return userService.createUserAsAdmin(userRegistrationPostResource);
-    }
-
-    @Override
     public ResponseEntity<UserGetResource> getProfile() {
         return userService.getProfile();
     }

@@ -10,8 +10,6 @@ public interface UserService {
 
     ResponseEntity<UserGetResource> register(UserRegistrationPostResource userRegistrationPostResource);
 
-    ResponseEntity<UserGetResource> createUserAsAdmin(UserRegistrationPostResource userRegistrationPostResource);
-
     ResponseEntity<UserGetResource> getProfile();
 
     ResponseEntity<UserGetResource> updateProfile(UserPatchResource userPatchResource);

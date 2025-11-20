@@ -64,41 +64,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public ResponseEntity<UserGetResource> createUserAsAdmin(UserRegistrationPostResource registrationRequest) {
-        log.debug("Admin creating user with email: {}", registrationRequest.getEmail());
-
-        // Validate admin can only create specific roles
-        if (registrationRequest.getRole() == null ||
-                (registrationRequest.getRole() != RoleEnum.DRIVER && registrationRequest.getRole() != RoleEnum.CONTROLLER)) {
-            log.warn("Admin attempted to create user with invalid role: {}", registrationRequest.getRole());
-            throw new IllegalArgumentException("Admin can only create DRIVER or CONTROLLER accounts");
-        }
-
-        // Check email uniqueness
-        if (userDaoService.existsBy(UserSpecification.withEmail(registrationRequest.getEmail()))) {
-            log.warn("Admin creation failed: email {} already exists", registrationRequest.getEmail());
-            throw new IllegalArgumentException("Email already registered");
-        }
-
-        // Create user with admin-specified role
-        UserModel user = userMapper.registrationToModel(registrationRequest);
-        user.setRole(registrationRequest.getRole()); // use role from admin request
-        user.setActivated(false); // require activation
-        user.setEnabled(true); // enable by default
-
-        user = userDaoService.save(user);
-        log.info("Admin created user successfully with email {} and role {}", user.getEmail(), user.getRole());
-
-        // Send activation email
-        TokenModel tokenModel = tokenService.generateAccountValidationToken(user);
-        mailingService.sendActivationAccountEmail(user, tokenModel);
-        log.debug("Activation email sent to {}", user.getEmail());
-
-        return ResponseEntity.ok(userMapper.modelToGetResource(user));
-    }
-
-    @Override
     public ResponseEntity<UserGetResource> getProfile() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         log.debug("Fetching profile for authenticated user: {}", email);
@@ -127,11 +92,5 @@ public class UserServiceImpl implements UserService {
         log.info("User updated successfully with id: {}", existingUser.getId());
 
         return ResponseEntity.ok(userMapper.modelToGetResource(existingUser));
-    }
-
-    public Page<UserGetResource> getAllUsers(Pageable pageable) {
-        // Get all users with pagination
-        Page<UserModel> users = userDaoService.findAllBy(null, pageable); // null specification = all users
-        return users.map(userMapper::modelToGetResource);
     }
 }

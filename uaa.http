@@ -102,7 +102,7 @@ Content-Type: application/json
 
 ### 12. Admin Creates Driver Account
 
-POST {{baseURL}}/authMgtApi/users/admin/create
+POST {{baseURL}}/authMgtApi/admin/create
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
@@ -120,7 +120,7 @@ Content-Type: application/json
 
 ### 13. Admin Creates Controller Account
 
-POST {{baseURL}}/authMgtApi/users/admin/create
+POST {{baseURL}}/authMgtApi/admin/create
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
@@ -135,4 +135,9 @@ Content-Type: application/json
   "address": "Casablanca, Maroc",
   "role": "CONTROLLER"
 }
+
+### 14. Get All Users as Admin
+GET {{baseURL}}/authMgtApi/admin/users?page=0&size=10
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
 ###
