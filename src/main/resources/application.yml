@@ -102,3 +102,7 @@ ui:
     url: http://localhost:5173
   admin:
     url: http://localhost:5173
+
+
+internal:
+  service-secret: "SUPER_SECRET_INTERNAL_TOKEN_123"

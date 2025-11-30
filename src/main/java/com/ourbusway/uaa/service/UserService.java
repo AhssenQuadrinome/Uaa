@@ -13,4 +13,6 @@ public interface UserService {
     ResponseEntity<UserGetResource> getProfile();
 
     ResponseEntity<UserGetResource> updateProfile(UserPatchResource userPatchResource);
+
+    ResponseEntity<UserGetResource> getUserById(String id);
 }

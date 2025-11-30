@@ -93,4 +93,13 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok(userMapper.modelToGetResource(existingUser));
     }
+
+    @Override
+    public ResponseEntity<UserGetResource> getUserById(String id){
+        UserModel user = userDaoService.findOneBy(UserSpecification.withUuid(id));
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with id: " + id);
+        }
+        return ResponseEntity.ok(userMapper.modelToGetResource(user));
+    };
 }
