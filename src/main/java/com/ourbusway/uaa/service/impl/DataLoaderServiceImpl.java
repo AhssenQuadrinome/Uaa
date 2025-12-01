@@ -29,7 +29,8 @@ public class DataLoaderServiceImpl implements DataLoaderService, CommandLineRunn
             log.info("Admin user <{}> not found. Creating default admin...", adminEmail);
 
             UserModel admin = new UserModel();
-            admin.setFirstName("OurBusWay Administrator");
+            admin.setFirstName("OurBusWay");
+            admin.setLastName("Administrator");
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setActivated(true);
