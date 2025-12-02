@@ -82,4 +82,32 @@ public class AdminServiceImpl implements AdminService {
         log.info("Admin retrieved {} users", userResources.getTotalElements());
         return ResponseEntity.ok(userResources);
     }
+
+    @Override
+    @Transactional
+    public ResponseEntity<UserGetResource> toggleUserStatus(String userId) {
+        log.debug("Admin toggling user status for user ID: {}", userId);
+
+        // Find user
+        UserModel user = userDaoService.findById(userId)
+                .orElseThrow(() -> {
+                    log.warn("User not found with ID: {}", userId);
+                    return new IllegalArgumentException("User not found");
+                });
+
+        // Prevent toggling administrator accounts
+        if (user.getRole() == RoleEnum.ADMINISTRATOR) {
+            log.warn("Admin attempted to toggle status of administrator account: {}", userId);
+            throw new IllegalArgumentException("Cannot modify administrator account status");
+        }
+
+        // Toggle enabled status
+        boolean newStatus = !user.isEnabled();
+        user.setEnabled(newStatus);
+        user = userDaoService.save(user);
+
+        log.info("User {} status toggled to {}", user.getEmail(), newStatus ? "ENABLED" : "DISABLED");
+
+        return ResponseEntity.ok(userMapper.modelToGetResource(user));
+    }
 }

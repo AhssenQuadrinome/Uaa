@@ -11,4 +11,6 @@ public interface AdminService {
     ResponseEntity<UserGetResource> createUserAsAdmin(UserRegistrationPostResource userRegistrationPostResource);
 
     ResponseEntity<Page<UserGetResource>> getAllUsers(Pageable pageable);
+
+    ResponseEntity<UserGetResource> toggleUserStatus(String userId);
 }
