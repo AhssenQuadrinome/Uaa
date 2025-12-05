@@ -107,5 +107,5 @@ ui:
 internal:
   service-secret: "SUPER_SECRET_INTERNAL_TOKEN_123"
 
-  server:
+server:
   port: 8081
