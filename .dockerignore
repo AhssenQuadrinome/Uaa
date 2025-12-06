@@ -1,0 +1,17 @@
+target/
+.git
+.gitignore
+*.md
+*.log
+
+# Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+
