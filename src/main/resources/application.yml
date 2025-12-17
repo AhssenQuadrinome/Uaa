@@ -70,11 +70,11 @@ mail:
   # SendGrid configuration
   # ===================================================================
   template:
-    organisation_member_reset_password: d-58360fc0abde469785708d9655e6041c
-    organisation_member_reset_password_confirmation: d-bee594bb0c414cd9a1b7db2ddeb79990
+    organisation_member_reset_password: d-2439ca0112254f1ea64ad4fe5f6b64d7
+    organisation_member_reset_password_confirmation: d-79383150fe244ae3be773ed38e923855
 
-    account-validation: d-1430eaf403f040f8a2cd6b9f7833b4f1
-    organisation_member_account_confirmation_after_validation: d-b484fa0b4eff4b4e812e276213452339
+    account-validation: d-119c15b102b646b2bf6cdd87fe279ade
+    organisation_member_account_confirmation_after_validation: d-2b25aaa2daf44541b2cd05cd3a3808ff
 uaa:
   # ===================================================================
   # Security configuration
