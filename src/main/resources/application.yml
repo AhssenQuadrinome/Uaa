@@ -99,9 +99,9 @@ ui:
   # OURBUSWAY configuration
   # ===================================================================
   client:
-    url: http://localhost:5173
+    url: http://ourbusway-alb-1436595524.us-east-1.elb.amazonaws.com
   admin:
-    url: http://localhost:5173
+    url: http://ourbusway-alb-1436595524.us-east-1.elb.amazonaws.com
 
 
 internal:
